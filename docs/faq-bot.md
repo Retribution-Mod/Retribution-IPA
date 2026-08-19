@@ -116,7 +116,7 @@ The JS bundle updates automatically when you restart Discord.
 
 **🛠️ How do I build the bundle?**
 
-See the [Building guide](https://github.com/Retribution-Mod/Retribution/blob/main/docs/2_building.md).
+See the [Building guide](https://github.com/Retribution-Mod/retribution-bundle/blob/main/docs/2_building.md).
 
 ---
 
@@ -124,7 +124,7 @@ See the [Building guide](https://github.com/Retribution-Mod/Retribution/blob/mai
 
 **📢 Where do I get help?**
 
-Bug reports and feature requests: [GitHub Issues](https://github.com/Retribution-Mod/Retribution/issues)
+Bug reports and feature requests: [GitHub Issues](https://github.com/Retribution-Mod/retribution-bundle/issues)
 Community support: the Discord server linked in the README.
 
 ---
@@ -133,7 +133,7 @@ Community support: the Discord server linked in the README.
 
 **🔗 Useful links**
 
-- [Retribution bundle releases](https://github.com/Retribution-Mod/Retribution/releases/latest)
+- [Retribution bundle releases](https://github.com/Retribution-Mod/retribution-bundle/releases/latest)
 - [Retribution Manager releases](https://github.com/Retribution-Mod/retribution-manager/releases/latest)
 - [RetributionXposed releases](https://github.com/Retribution-Mod/retribution-xposed/releases/latest)
 - [retribution-tweak releases](https://github.com/Retribution-Mod/retribution-tweak/releases/latest)

@@ -1,6 +1,6 @@
 # 👊 Retribution
 
-This documentation explains how to use [Retribution](https://github.com/Retribution-Mod/Retribution).
+This documentation explains how to use [Retribution](https://github.com/Retribution-Mod/retribution-bundle).
 
 ## 📖 Table of contents
 

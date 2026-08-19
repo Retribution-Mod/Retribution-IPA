@@ -24,7 +24,7 @@
 
 # 👊 Retribution
 
-![GitHub Workflow Status (with event)](https://img.shields.io/github/actions/workflow/status/Retribution-Mod/Retribution/release.yml)
+![GitHub Workflow Status (with event)](https://img.shields.io/github/actions/workflow/status/Retribution-Mod/retribution-bundle/release.yml)
 [![3-Clause BSD License](https://img.shields.io/badge/License-BSD%203--Clause-blue.svg)](https://opensource.org/licenses/BSD-3-Clause)
 
 A client modification for **Discord on Android and iOS**. Retribution is its own client-mod platform, with its own plugin, theme, and font support.

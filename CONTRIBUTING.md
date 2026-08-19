@@ -4,12 +4,12 @@ This document describes how to contribute to Retribution bundle.
 
 ## 📖 Resources to help you get started
 
-* [Issues](https://github.com/Retribution-Mod/Retribution/issues) are where we keep track of bugs and feature requests
+* [Issues](https://github.com/Retribution-Mod/retribution-bundle/issues) are where we keep track of bugs and feature requests
 
 ## 🙏 Submitting a feature request
 
 Features can be requested by opening an issue using the
-[Feature request issue template](https://github.com/Retribution-Mod/Retribution/issues/new?assignees=&labels=Feature+request&projects=&template=feature_request.yml&title=feat%3A+).
+[Feature request issue template](https://github.com/Retribution-Mod/retribution-bundle/issues/new?assignees=&labels=Feature+request&projects=&template=feature_request.yml&title=feat%3A+).
 
 > **Note**
 > Requests can be accepted or rejected at the discretion of maintainers of Retribution bundle.
@@ -18,7 +18,7 @@ Features can be requested by opening an issue using the
 ## 🐞 Submitting a bug report
 
 If you encounter a bug while using Retribution bundle, open an issue using the
-[Bug report issue template](https://github.com/Retribution-Mod/Retribution/issues/new?assignees=&labels=Bug+report&projects=&template=bug_report.yml&title=bug%3A+).
+[Bug report issue template](https://github.com/Retribution-Mod/retribution-bundle/issues/new?assignees=&labels=Bug+report&projects=&template=bug_report.yml&title=bug%3A+).
 
 ## 📝 How to contribute
 

@@ -4,7 +4,7 @@
 3. Clone the repository
 
     ```sh
-    git clone https://github.com/Retribution-Mod/Retribution.git
+    git clone https://github.com/Retribution-Mod/retribution-bundle.git
     ```
 
 4. Install dependencies

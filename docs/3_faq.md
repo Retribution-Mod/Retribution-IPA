@@ -129,7 +129,7 @@ See the [Building guide](./2_building.md).
 
 ## Where do I get help?
 
-- Bug reports and feature requests: [GitHub issues](https://github.com/Retribution-Mod/Retribution/issues)
+- Bug reports and feature requests: [GitHub issues](https://github.com/Retribution-Mod/retribution-bundle/issues)
 - Community support: the Discord server linked in the main README.
 
 ---
