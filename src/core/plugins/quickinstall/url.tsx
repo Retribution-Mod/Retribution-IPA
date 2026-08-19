@@ -1,9 +1,10 @@
 import { formatString, Strings } from "@core/i18n";
 import { showConfirmationAlert } from "@core/vendetta/alerts";
 import { VdPluginManager } from "@core/vendetta/plugins";
+import { installFont } from "@lib/addons/fonts";
 import { installTheme } from "@lib/addons/themes";
 import { findAssetId } from "@lib/api/assets";
-import { isThemeSupported } from "@lib/api/native/loader";
+import { isFontSupported, isThemeSupported } from "@lib/api/native/loader";
 import { after, instead } from "@lib/api/patcher";
 import { VD_PROXY_PREFIX, VD_THEMES_CHANNEL_ID } from "@lib/utils/constants";
 import { lazyDestructure } from "@lib/utils/lazy";
@@ -27,8 +28,15 @@ function typeFromUrl(url: string) {
     }
 }
 
-function installWithToast(type: "plugin" | "theme", url: string) {
-    (type === "plugin" ? VdPluginManager.installPlugin.bind(VdPluginManager) : installTheme)(url)
+function installWithToast(type: "plugin" | "theme" | "font", url: string) {
+    const install =
+        type === "plugin"
+            ? VdPluginManager.installPlugin.bind(VdPluginManager)
+            : type === "theme"
+              ? installTheme
+              : installFont;
+
+    install(url)
         .then(() => {
             showToast(Strings.SUCCESSFULLY_INSTALLED, findAssetId("DownloadIcon"));
         })
@@ -54,6 +62,8 @@ function handleDeepLink(link: string) {
         installWithToast("plugin", targetUrl);
     } else if (parsed.host === "theme" && isThemeSupported()) {
         installWithToast("theme", targetUrl);
+    } else if (parsed.host === "font" && isFontSupported()) {
+        installWithToast("font", targetUrl);
     }
 }
 
