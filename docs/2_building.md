@@ -1,5 +1,5 @@
 ## Building
-1. Install a Retribution loader with config support (any mentioned in the [Installing](#installing) section).
+1. Install a Retribution loader with config support (any mentioned in [Installing](./1_installing.md)).
 2. Go to **Settings** > **General** and enable **Developer Settings**.
 3. Clone the repository
 

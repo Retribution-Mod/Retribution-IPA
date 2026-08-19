@@ -4,10 +4,14 @@ This documentation explains how to use [Retribution](https://github.com/Retribut
 
 ## 📖 Table of contents
 
-TODO.
+1. [Prerequisites](./0_prerequisites.md)
+2. [Installing](./1_installing.md)
+3. [Building](./2_building.md)
+4. [FAQ](./3_faq.md)
+5. [Deep links](./4_deep_links.md)
 
 ## ⏭️ Start here
 
-The next page will tell you about the prerequisites for using Retribution.
+If you are a user, start with the prerequisites and installation guides. If you want to develop or contribute, continue to the building page.
 
-Continue: [💼 Prerequisites](0_prerequisites.md)
+Continue: [Prerequisites](./0_prerequisites.md)
