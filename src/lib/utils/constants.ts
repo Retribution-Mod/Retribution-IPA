@@ -1,4 +1,4 @@
-export const DISCORD_SERVER = "https://discord.com/invite/ddcQf3s2Uq";
+export const DISCORD_SERVER = "https://discord.com/invite/7CWcwZZGWr";
 export const GITHUB = "https://github.com/retribution-mod";
 export const HTTP_REGEX = /^https?:\/\/(?:www\.)?[-a-zA-Z0-9@:%._+~#=]{1,256}\.[a-zA-Z0-9()]{1,6}\b(?:[-a-zA-Z0-9()@:%_+.~#?&/=]*)$/;
 export const HTTP_REGEX_MULTI = /https?:\/\/(?:www\.)?[-a-zA-Z0-9@:%._+~#=]{1,256}\.[a-zA-Z0-9()]{1,6}\b(?:[-a-zA-Z0-9()@:%_+.~#?&//=]*)/g;
