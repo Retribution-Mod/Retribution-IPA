@@ -6,7 +6,7 @@
            <img height="32px" src="assets/logo/logo-light.svg" />
        </picture>
    </a>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-   <a href="https://discord.com/invite/ddcQf3s2Uq">
+   <a href="https://discord.gg/7CWcwZZGWr">
        <picture>
            <source height="32px" media="(prefers-color-scheme: dark)" srcset="https://user-images.githubusercontent.com/13122796/178032563-d4e084b7-244e-4358-af50-26bde6dd4996.png" />
            <img height="32px" src="https://user-images.githubusercontent.com/13122796/178032563-d4e084b7-244e-4358-af50-26bde6dd4996.png" />
@@ -27,12 +27,13 @@
 ![GitHub Workflow Status (with event)](https://img.shields.io/github/actions/workflow/status/Retribution-Mod/Retribution/release.yml)
 [![3-Clause BSD License](https://img.shields.io/badge/License-BSD%203--Clause-blue.svg)](https://opensource.org/licenses/BSD-3-Clause)
 
-A client modification for Discord Android, continuation of [Bunny](https://github.com/pyoncord/Bunny).
+A client modification for **Discord on Android and iOS**. Retribution is its own client-mod platform, with its own plugin, theme, and font support.
 
 ## 💪 Features
 
-- **🔌 Plugins**: Extend Discord with custom features
-- **🎨 Themes & Fonts**: Customize Discord's appearance to your liking
+- **🔌 Plugins**: Extend Discord with custom features — browse the list at https://plugins-list.pages.dev or install the [Plugin List plugin](https://purple-eyez.github.io/Plugins-List_Plugin/plugins-list/)
+- **🎨 Themes**: Customize Discord's appearance — themes are available inside the Plugin List
+- **✏️ Fonts**: Find and apply fonts at https://bunny-google-fonts.vercel.app/
 - **🧪 Experiments**: Try out Discord's new features before they're rolled out
 
 ## ⬇️ Download
@@ -41,8 +42,13 @@ This repository releases JavaScript bundles for loaders to execute. These are th
 
 ### Android
 
-- **🩹 Root with Xposed**: [RetributionXposed](https://github.com/Retribution-Mod/retribution-xposed/releases/latest)
-- **📵 Non-root**: [Retribution Manager](https://github.com/Retribution-Mod/retribution-manager/releases/latest)
+- **📵 No root**: [Retribution Manager](https://github.com/Retribution-Mod/retribution-manager/releases/latest)
+- **🩹 Root or LSPosed**: [RetributionXposed](https://github.com/Retribution-Mod/retribution-xposed/releases/latest)
+
+### iOS
+
+- **Jailbreak / TrollStore**: install the `.deb` from [retribution-tweak releases](https://github.com/Retribution-Mod/retribution-tweak/releases/latest)
+- **Sideload (no jailbreak)**: install the IPA with [SideStore](https://sidestore.io) or [AltStore](https://altstore.io)
 
 ## 📚 Everything else
 
