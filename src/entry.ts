@@ -4,6 +4,7 @@ const { instead } = require("spitroast");
 
 // @ts-ignore - window is defined later in the bundle, so we assign it early
 globalThis.window = globalThis;
+globalThis.__RETRIBUTION_BUILD_TARGET__ = __BUILD_TARGET__;
 
 async function initializeRetribution() {
     try {

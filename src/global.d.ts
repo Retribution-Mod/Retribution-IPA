@@ -7,6 +7,7 @@ declare global {
     var nativeModuleProxy: Record<string, any>;
     var __turboModuleProxy: (name: string) => any;
     var __BUILD_TARGET__: "old" | "new";
+    var __RETRIBUTION_BUILD_TARGET__: "old" | "new";
 
     interface Window {
         [key: string]: any;
