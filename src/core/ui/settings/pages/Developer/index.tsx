@@ -10,6 +10,7 @@ import { getReactDevToolsVersion, isLoaderConfigSupported, isReactDevToolsPreloa
 import { loaderConfig, settings } from "@lib/api/settings";
 import { showToast } from "@lib/ui/toasts";
 import { lazyDestructure } from "@lib/utils/lazy";
+import { BUILD_TARGET } from "@lib/utils/version";
 import { NavigationNative } from "@metro/common";
 import { Button, LegacyFormText, Stack, TableRow, TableRowGroup, TableSwitchRow, TextInput } from "@metro/common/components";
 import { findByProps } from "@metro/wrappers";
@@ -25,7 +26,7 @@ const { showSimpleActionSheet } = lazyDestructure(() => findByProps("showSimpleA
 const { openAlert } = lazyDestructure(() => findByProps("openAlert", "dismissAlert"));
 const { AlertModal, AlertActionButton } = lazyDestructure(() => findByProps("AlertModal", "AlertActions"));
 
-const RDT_EMBED_LINK = "https://retribution-assets.allyapp.workers.dev/bundle";
+const RDT_EMBED_LINK = `https://retribution-assets.allyapp.workers.dev/?key=react-devtools-core-hbc${BUILD_TARGET === "new" ? 98 : 96}.bundle`;
 
 const useStyles = createStyles({
     leadingText: {

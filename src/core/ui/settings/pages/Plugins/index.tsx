@@ -1,5 +1,7 @@
 import { Strings } from "@core/i18n";
 import AddonPage from "@core/ui/components/AddonPage";
+import PluginBrowser from "@core/ui/settings/pages/PluginBrowser";
+import PluginDataBrowser from "@core/ui/settings/pages/PluginDataBrowser";
 import PluginCard from "@core/ui/settings/pages/Plugins/components/PluginCard";
 import { VdPluginManager } from "@core/vendetta/plugins";
 import { useProxy } from "@core/vendetta/storage";
@@ -117,7 +119,7 @@ export default function Plugins() {
                     onPress={() => {
                         navigation.push("BUNNY_CUSTOM_PAGE", {
                             title: "Public Plugin Browser",
-                            render: React.lazy(() => import("../PluginDataBrowser")),
+                            render: PluginDataBrowser,
                         });
                     }}
                 />
@@ -128,7 +130,7 @@ export default function Plugins() {
                     onPress={() => {
                         navigation.push("BUNNY_CUSTOM_PAGE", {
                             title: "Plugin Browser",
-                            render: React.lazy(() => import("../PluginBrowser")),
+                            render: PluginBrowser,
                         });
                     }}
                 />
