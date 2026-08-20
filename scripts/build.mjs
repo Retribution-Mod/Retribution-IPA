@@ -22,8 +22,13 @@ const args = yargs(process.argv.slice(2));
 const {
     "release-branch": releaseBranch,
     "build-minify": buildMinify,
-    "dev": dev
+    "dev": dev,
+    "target": buildTarget = "old",
 } = args;
+
+if (!["old", "new"].includes(buildTarget)) {
+    throw new Error(`Invalid build target: ${buildTarget}. Use "old" or "new".`);
+}
 
 let context = null;
 
@@ -31,7 +36,7 @@ let context = null;
 const config = {
     entryPoints: ["src/entry.ts"],
     bundle: true,
-    outfile: "dist/retribution.js",
+    outfile: `dist/retribution-${buildTarget}.js`,
     format: "iife",
     splitting: false,
     external: [
@@ -51,7 +56,8 @@ const config = {
     },
     define: {
         window: "globalThis",
-        __DEV__: dev ?? JSON.stringify(releaseBranch !== "main")
+        __DEV__: dev ?? JSON.stringify(releaseBranch !== "main"),
+        __BUILD_TARGET__: JSON.stringify(buildTarget)
     },
     inject: ["./shims/asyncIteratorSymbol.js", "./shims/promiseAllSettled.js"],
     legalComments: "none",

@@ -6,6 +6,7 @@ declare global {
     var nativePerformanceNow: typeof performance.now;
     var nativeModuleProxy: Record<string, any>;
     var __turboModuleProxy: (name: string) => any;
+    var __BUILD_TARGET__: "old" | "new";
 
     interface Window {
         [key: string]: any;
