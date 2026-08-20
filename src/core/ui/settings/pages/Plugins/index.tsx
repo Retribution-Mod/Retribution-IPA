@@ -129,7 +129,7 @@ export default function Plugins() {
                     icon={findAssetId("CompassIcon")}
                     onPress={() => {
                         navigation.push("BUNNY_CUSTOM_PAGE", {
-                            title: "Plugin Browser",
+                            title: "Plugin Repos",
                             render: PluginBrowser,
                         });
                     }}
