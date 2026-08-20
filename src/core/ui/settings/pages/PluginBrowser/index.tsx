@@ -137,12 +137,29 @@ function BrowserPage() {
         </View>;
     }
 
+    if (isPending && !data) {
+        return (
+            <View style={{ flex: 1, justifyContent: "center", alignItems: "center" }}>
+                <Text variant="heading-md/medium" color="text-muted">
+                    Loading plugins...
+                </Text>
+            </View>
+        );
+    }
+
     return <FlashList
-        data={data}
+        data={data ?? []}
         refreshing={isPending}
         onRefresh={refetch}
         estimatedItemSize={136}
         contentContainerStyle={{ paddingBottom: 90, paddingHorizontal: 5 }}
+        ListEmptyComponent={() => (
+            <View style={{ padding: 16, alignItems: "center" }}>
+                <Text variant="heading-md/medium" style={{ textAlign: "center" }}>
+                    No plugins found. Try adding a repository.
+                </Text>
+            </View>
+        )}
         renderItem={({ item: manifest }: any) => (
             <View style={{ paddingVertical: 6, paddingHorizontal: 8 }}>
                 <PluginCard manifest={manifest} />

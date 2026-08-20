@@ -10,11 +10,13 @@ import { findAssetId } from "@lib/api/assets";
 import { settings } from "@lib/api/settings";
 import { useObservable } from "@lib/api/storage";
 import { ActionSheet, BottomSheetTitleHeader, Button, TableRowGroup, TableRowIcon, TableSwitchRow, TableRow, TableRadioGroup, TableRadioRow } from "@metro/common/components";
+import { NavigationNative } from "@metro/common";
 import { View } from "react-native";
 
 export default function Themes() {
     useProxy(settings);
     useProxy(themes);
+    const navigation = NavigationNative.useNavigation();
 
     return (
         <AddonPage<VdThemeInfo>
@@ -42,6 +44,21 @@ export default function Themes() {
                     style={{ marginTop: 8 }}
                 />
             }}
+            ListFooterComponent={() => (
+                <View style={{ alignItems: "center", justifyContent: "center", paddingTop: 16, gap: 12 }}>
+                    <Button
+                        size="lg"
+                        text="Browse Public Themes"
+                        icon={findAssetId("CompassIcon")}
+                        onPress={() => {
+                            navigation.push("BUNNY_CUSTOM_PAGE", {
+                                title: "Public Theme Browser",
+                                render: React.lazy(() => import("../ThemeBrowser")),
+                            });
+                        }}
+                    />
+                </View>
+            )}
             CardComponent={ThemeCard}
             OptionsActionSheetComponent={() => {
                 useObservable([colorsPref]);

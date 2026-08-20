@@ -108,18 +108,30 @@ export default function Plugins() {
                 </Card>
             </View>;
         }}
-        ListFooterComponent={() => __DEV__ && (
-            <View style={{ alignItems: "center", justifyContent: "center", paddingTop: 16, gap: 12 }}><Button
-                size="lg"
-                text="Browse Plugins"
-                icon={findAssetId("CompassIcon")}
-                onPress={() => {
-                    navigation.push("BUNNY_CUSTOM_PAGE", {
-                        title: "Plugin Browser",
-                        render: React.lazy(() => import("../PluginBrowser")),
-                    });
-                }}
-            />
+        ListFooterComponent={() => (
+            <View style={{ alignItems: "center", justifyContent: "center", paddingTop: 16, gap: 12 }}>
+                <Button
+                    size="lg"
+                    text="Browse Public Plugins"
+                    icon={findAssetId("CompassIcon")}
+                    onPress={() => {
+                        navigation.push("BUNNY_CUSTOM_PAGE", {
+                            title: "Public Plugin Browser",
+                            render: React.lazy(() => import("../PluginDataBrowser")),
+                        });
+                    }}
+                />
+                <Button
+                    size="lg"
+                    text="Browse Plugin Repos"
+                    icon={findAssetId("CompassIcon")}
+                    onPress={() => {
+                        navigation.push("BUNNY_CUSTOM_PAGE", {
+                            title: "Plugin Browser",
+                            render: React.lazy(() => import("../PluginBrowser")),
+                        });
+                    }}
+                />
             </View>
         )}
         installAction={{
