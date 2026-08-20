@@ -14,7 +14,7 @@ function specUrl(family: string) {
 }
 
 export default function FontBrowser() {
-    const items = (fontsData as FontDataItem[]).map((f) => ({
+    const items = (fontsData as unknown as FontDataItem[]).map((f) => ({
         ...f,
         name: f.family,
         description: f.category,

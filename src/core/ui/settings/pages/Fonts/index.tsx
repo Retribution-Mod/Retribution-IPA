@@ -1,5 +1,6 @@
 import { Strings } from "@core/i18n";
 import AddonPage from "@core/ui/components/AddonPage";
+import FontBrowser from "@core/ui/settings/pages/FontBrowser";
 import FontEditor from "@core/ui/settings/pages/Fonts/FontEditor";
 import { useProxy } from "@core/vendetta/storage";
 import { FontDefinition, fonts } from "@lib/addons/fonts";
@@ -36,7 +37,7 @@ export default function Fonts() {
                         onPress={() => {
                             navigation.push("BUNNY_CUSTOM_PAGE", {
                                 title: "Google Font Browser",
-                                render: React.lazy(() => import("../FontBrowser")),
+                                render: FontBrowser,
                             });
                         }}
                     />

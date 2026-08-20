@@ -1,5 +1,6 @@
 import { formatString, Strings } from "@core/i18n";
 import AddonPage from "@core/ui/components/AddonPage";
+import ThemeBrowser from "@core/ui/settings/pages/ThemeBrowser";
 import ThemeCard from "@core/ui/settings/pages/Themes/ThemeCard";
 import { useProxy } from "@core/vendetta/storage";
 import { getCurrentTheme, installTheme, themes, VdThemeInfo } from "@lib/addons/themes";
@@ -53,7 +54,7 @@ export default function Themes() {
                         onPress={() => {
                             navigation.push("BUNNY_CUSTOM_PAGE", {
                                 title: "Public Theme Browser",
-                                render: React.lazy(() => import("../ThemeBrowser")),
+                                render: ThemeBrowser,
                             });
                         }}
                     />
