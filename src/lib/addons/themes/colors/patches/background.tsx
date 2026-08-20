@@ -31,6 +31,12 @@ function ThemeBackground({ children }: { children: React.ReactNode; }) {
 }
 
 export default function patchChatBackground() {
+    // chroma()'s alpha/hex conversion is expensive and this runs on every render of the main
+    // message list (i.e. constantly) - the raw color + opacity rarely change between renders, so
+    // skip recomputing when the inputs match the last render's.
+    let lastInput: string | null = null;
+    let lastResult: string | null = null;
+
     try {
         const patches = [
             after("render", Messages, (_, ret) => {
@@ -43,11 +49,18 @@ export default function patchChatBackground() {
 
                 if (messagesComponent) {
                     const flattened = StyleSheet.flatten(messagesComponent.props.style);
-                    const backgroundColor = chroma(
-                        flattened.backgroundColor || "black"
-                    ).alpha(
-                        1 - (_colorRef.current.background?.opacity ?? 1)
-                    ).hex();
+                    const rawColor = flattened.backgroundColor || "black";
+                    const opacity = 1 - (_colorRef.current.background?.opacity ?? 1);
+                    const input = `${rawColor}|${opacity}`;
+
+                    let backgroundColor: string;
+                    if (input === lastInput && lastResult) {
+                        backgroundColor = lastResult;
+                    } else {
+                        backgroundColor = chroma(rawColor).alpha(opacity).hex();
+                        lastInput = input;
+                        lastResult = backgroundColor;
+                    }
 
                     messagesComponent.props.style = StyleSheet.flatten([
                         messagesComponent.props.style,

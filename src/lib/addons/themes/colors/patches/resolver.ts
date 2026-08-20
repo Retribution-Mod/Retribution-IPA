@@ -22,6 +22,26 @@ const SEMANTIC_FALLBACK_MAP: Record<string, string> = {
     "BG_SURFACE_RAISED": "BACKGROUND_MOBILE_PRIMARY"
 };
 
+// chroma()'s alpha/hex conversion does full color-space parsing on every call - resolveSemanticColor
+// resolves the same token+opacity pair over and over across renders, so cache the result and only
+// recompute when the active theme actually changes (tracked via _colorRef.key).
+const alphaCache = new Map<string, string>();
+let alphaCacheKey: string | null = null;
+
+function cachedAlphaHex(hex: string, opacity: number): string {
+    if (alphaCacheKey !== _colorRef.key) {
+        alphaCache.clear();
+        alphaCacheKey = _colorRef.key;
+    }
+    const cacheKey = `${hex}|${opacity}`;
+    let result = alphaCache.get(cacheKey);
+    if (result === undefined) {
+        result = chroma(hex).alpha(opacity).hex();
+        alphaCache.set(cacheKey, result);
+    }
+    return result;
+}
+
 export default function patchDefinitionAndResolver() {
     const callback = ([theme]: any[]) => theme === _colorRef.key ? [_colorRef.current!.reference] : void 0;
 
@@ -55,13 +75,13 @@ export default function patchDefinitionAndResolver() {
 
             if (semanticDef?.value) {
                 if (semanticDef.opacity === 1) return semanticDef.value;
-                return chroma(semanticDef.value).alpha(semanticDef.opacity).hex();
+                return cachedAlphaHex(semanticDef.value, semanticDef.opacity);
             }
 
             const rawValue = _colorRef.current.raw[colorDef.raw];
             if (rawValue) {
                 // Set opacity if needed
-                return colorDef.opacity === 1 ? rawValue : chroma(rawValue).alpha(colorDef.opacity).hex();
+                return colorDef.opacity === 1 ? rawValue : cachedAlphaHex(rawValue, colorDef.opacity);
             }
 
             // Fallback to default
