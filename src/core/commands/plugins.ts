@@ -1,5 +1,5 @@
 import { Strings } from "@core/i18n";
-import { VdPluginManager, VendettaPlugin } from "@core/vendetta/plugins";
+import { VdPluginManager, VendettaPlugin } from "@core/vd-compat/plugins";
 import { ApplicationCommand, ApplicationCommandOptionType } from "@lib/api/commands/types";
 import { messageUtil } from "@metro/common";
 

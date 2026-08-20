@@ -1,7 +1,7 @@
 import { Strings } from "@core/i18n";
 import { CardWrapper } from "@core/ui/components/AddonCard";
-import { showConfirmationAlert } from "@core/vendetta/alerts";
-import { useProxy } from "@core/vendetta/storage";
+import { showConfirmationAlert } from "@core/vd-compat/alerts";
+import { useProxy } from "@core/vd-compat/storage";
 import { FontDefinition, fonts, selectFont } from "@lib/addons/fonts";
 import { findAssetId } from "@lib/api/assets";
 import { lazyDestructure } from "@lib/utils/lazy";

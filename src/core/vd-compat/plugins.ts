@@ -1,4 +1,4 @@
-import { awaitStorage, createMMKVBackend, createStorage, purgeStorage, wrapSync } from "@core/vendetta/storage";
+import { awaitStorage, createMMKVBackend, createStorage, purgeStorage, wrapSync } from "@core/vd-compat/storage";
 import { Author } from "@lib/addons/types";
 import { settings } from "@lib/api/settings";
 import { safeFetch } from "@lib/utils";
@@ -90,8 +90,8 @@ export const VdPluginManager = {
      * @internal
      */
     async evalPlugin(plugin: VendettaPlugin) {
-        const vendettaForPlugins = {
-            ...window.vendetta,
+        const api = {
+            ...window.retribution,
             plugin: {
                 id: plugin.id,
                 manifest: plugin.manifest,
@@ -100,9 +100,15 @@ export const VdPluginManager = {
             },
             logger: new LoggerClass(`Retribution » ${plugin.manifest.name}`),
         };
+        // The plugin JS is a raw expression (the plugin's exported object).
+        // We wrap it in an arrow function that receives the API object.
+        // The parameter name "vendetta" is kept for backwards compatibility —
+        // existing plugins reference `vendetta.*` inside their code.
+        // New plugins built with the retribution template will use a different
+        // parameter name but the API object is the same.
         const pluginString = `vendetta=>{return ${plugin.js}}\n//# sourceURL=${plugin.id}`;
 
-        const raw = (0, eval)(pluginString)(vendettaForPlugins);
+        const raw = (0, eval)(pluginString)(api);
         const ret = typeof raw === "function" ? raw() : raw;
         return ret?.default ?? ret ?? {};
     },

@@ -90,6 +90,9 @@ export function getVendettaLoaderIdentity(): VendettaLoaderIdentity | null {
     return polyfillVendettaLoaderIdentity();
 }
 
+// Alias for the unified Retribution API
+export const getRetributionLoaderIdentity = getVendettaLoaderIdentity;
+
 // add to __vendetta_loader anyway
 getVendettaLoaderIdentity();
 

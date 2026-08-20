@@ -1,5 +1,5 @@
 import DataBrowser from "@core/ui/components/DataBrowser";
-import { VdPluginManager } from "@core/vendetta/plugins";
+import { VdPluginManager } from "@core/vd-compat/plugins";
 import pluginsData from "@assets/data/plugins-data.json";
 import { findAssetId } from "@lib/api/assets";
 

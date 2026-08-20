@@ -1,6 +1,6 @@
 import { formatString, Strings } from "@core/i18n";
-import { showConfirmationAlert } from "@core/vendetta/alerts";
-import { VdPluginManager } from "@core/vendetta/plugins";
+import { showConfirmationAlert } from "@core/vd-compat/alerts";
+import { VdPluginManager } from "@core/vd-compat/plugins";
 import { installFont } from "@lib/addons/fonts";
 import { installTheme } from "@lib/addons/themes";
 import { findAssetId } from "@lib/api/assets";

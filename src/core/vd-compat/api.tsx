@@ -1,11 +1,11 @@
-import * as alerts from "@core/vendetta/alerts";
-import * as storage from "@core/vendetta/storage";
-import { createStorage } from "@core/vendetta/storage";
+import * as alerts from "@core/vd-compat/alerts";
+import * as storage from "@core/vd-compat/storage";
+import { createStorage } from "@core/vd-compat/storage";
 import * as themes from "@lib/addons/themes";
 import * as assets from "@lib/api/assets";
 import * as commands from "@lib/api/commands";
 import * as debug from "@lib/api/debug";
-import { getVendettaLoaderIdentity, isPyonLoader } from "@lib/api/native/loader";
+import { getRetributionLoaderIdentity, isPyonLoader } from "@lib/api/native/loader";
 import patcher from "@lib/api/patcher";
 import { loaderConfig, settings } from "@lib/api/settings";
 import * as utils from "@lib/utils";
@@ -25,9 +25,9 @@ import { View } from "react-native";
 
 import { VdPluginManager, VendettaPlugin } from "./plugins";
 
-export async function createVdPluginObject(plugin: VendettaPlugin) {
+export async function createPluginObject(plugin: VendettaPlugin) {
     return {
-        ...window.vendetta,
+        ...window.retribution,
         plugin: {
             id: plugin.id,
             manifest: plugin.manifest,
@@ -38,7 +38,10 @@ export async function createVdPluginObject(plugin: VendettaPlugin) {
     };
 }
 
-export const initVendettaObject = (): any => {
+// Backwards-compatible alias for existing external plugins
+export const createVdPluginObject = createPluginObject;
+
+export const initRetributionObject = (): any => {
     // pitfall: this assumes the returning module(s) are the same within the same location
     // find(m => m.render?.name === "ActionSheet") - would work fine
     // ["trackThis", "trackThat"].forEach(p => find(m => m[p])) - would not
@@ -48,7 +51,7 @@ export const initVendettaObject = (): any => {
         };
     };
 
-    const api = window.vendetta = {
+    const api = window.retribution = {
         patcher: {
             before: patcher.before,
             after: patcher.after,
@@ -127,7 +130,7 @@ export const initVendettaObject = (): any => {
         },
         constants: {
             DISCORD_SERVER: "https://discord.gg/n9QQ4XhhJP",
-            GITHUB: "https://github.com/vendetta-mod",
+            GITHUB: "https://github.com/Retribution-Mod",
             PROXY_PREFIX: "https://vd-plugins.github.io/proxy",
             HTTP_REGEX: /^https?:\/\/(?:www\.)?[-a-zA-Z0-9@:%._+~#=]{1,256}\.[a-zA-Z0-9()]{1,6}\b(?:[-a-zA-Z0-9()@:%_+.~#?&/=]*)$/,
             HTTP_REGEX_MULTI: /https?:\/\/(?:www\.)?[-a-zA-Z0-9@:%._+~#=]{1,256}\.[a-zA-Z0-9()]{1,6}\b(?:[-a-zA-Z0-9()@:%_+.~#?&//=]*)/g,
@@ -235,7 +238,7 @@ export const initVendettaObject = (): any => {
         },
         settings,
         loader: {
-            identity: getVendettaLoaderIdentity() ?? void 0,
+            identity: getRetributionLoaderIdentity() ?? void 0,
             config: loaderConfig,
         },
         logger: {
@@ -249,9 +252,17 @@ export const initVendettaObject = (): any => {
         },
         version: debug.versionHash,
         unload: () => {
+            delete window.retribution;
             delete window.vendetta;
         },
     };
 
+    // Backwards compatibility: alias window.vendetta to window.retribution
+    // so existing external plugins that import from "vendetta" keep working
+    window.vendetta = api;
+
     return () => api.unload();
 };
+
+// Backwards-compatible alias
+export const initVendettaObject = initRetributionObject;

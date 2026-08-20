@@ -2,7 +2,7 @@ import { formatString, Strings } from "@core/i18n";
 import AddonPage from "@core/ui/components/AddonPage";
 import ThemeBrowser from "@core/ui/settings/pages/ThemeBrowser";
 import ThemeCard from "@core/ui/settings/pages/Themes/ThemeCard";
-import { useProxy } from "@core/vendetta/storage";
+import { useProxy } from "@core/vd-compat/storage";
 import { getCurrentTheme, installTheme, themes, VdThemeInfo } from "@lib/addons/themes";
 import { colorsPref } from "@lib/addons/themes/colors/preferences";
 import { updateBunnyColor } from "@lib/addons/themes/colors/updater";

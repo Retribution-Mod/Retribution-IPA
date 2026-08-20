@@ -1,5 +1,5 @@
-import { VdPluginManager, VendettaPlugin } from "@core/vendetta/plugins";
-import { useProxy } from "@core/vendetta/storage";
+import { VdPluginManager, VendettaPlugin } from "@core/vd-compat/plugins";
+import { useProxy } from "@core/vd-compat/storage";
 
 import { UnifiedPluginModel } from ".";
 

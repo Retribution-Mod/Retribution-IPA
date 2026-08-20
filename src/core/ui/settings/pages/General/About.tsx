@@ -1,7 +1,7 @@
 import { Strings } from "@core/i18n";
 import { PyoncordIcon } from "@core/ui/settings";
 import Version from "@core/ui/settings/pages/General/Version";
-import { useProxy } from "@core/vendetta/storage";
+import { useProxy } from "@core/vd-compat/storage";
 import { getDebugInfo } from "@lib/api/debug";
 import { settings } from "@lib/api/settings";
 import { Stack, TableRowGroup } from "@metro/common/components";

@@ -1,7 +1,7 @@
 import { Strings } from "@core/i18n";
 import { CheckState, useFileExists } from "@core/ui/hooks/useFS";
 import AssetBrowser from "@core/ui/settings/pages/Developer/AssetBrowser";
-import { useProxy } from "@core/vendetta/storage";
+import { useProxy } from "@core/vd-compat/storage";
 import { findAssetId } from "@lib/api/assets";
 import { connectToDebugger, connectToReactDevTools } from "@lib/api/debug";
 import { disconnectDt, useIsDtConnected } from "@lib/api/debug/devtools";

@@ -1,4 +1,4 @@
-import { Emitter, EmitterEvent, EmitterListener, EmitterListenerData } from "@core/vendetta/Emitter";
+import { Emitter, EmitterEvent, EmitterListener, EmitterListenerData } from "@core/vd-compat/Emitter";
 import { NativeCacheModule, NativeFileModule } from "@lib/api/native/modules";
 import { Platform } from "react-native";
 

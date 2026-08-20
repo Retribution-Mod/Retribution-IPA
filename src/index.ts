@@ -2,8 +2,8 @@ import patchErrorBoundary from "@core/debug/patches/patchErrorBoundary";
 import initFixes from "@core/fixes";
 import { initFetchI18nStrings } from "@core/i18n";
 import initSettings from "@core/ui/settings";
-import { initVendettaObject } from "@core/vendetta/api";
-import { VdPluginManager } from "@core/vendetta/plugins";
+import { initRetributionObject } from "@core/vd-compat/api";
+import { VdPluginManager } from "@core/vd-compat/plugins";
 import { installFont, updateFonts } from "@lib/addons/fonts";
 import { initPlugins, updatePlugins } from "@lib/addons/plugins";
 import { fetchTheme, initThemes } from "@lib/addons/themes";
@@ -53,7 +53,7 @@ export default async () => {
         patchSettings(),
         patchCommands(),
         patchJsx(),
-        initVendettaObject(),
+        initRetributionObject(),
         initFetchI18nStrings(),
         initSettings(),
         initFixes(),
@@ -64,21 +64,22 @@ export default async () => {
         u => u.forEach(f => f && lib.unload.push(f))
     );
 
-    // Assign window object
+    // Assign window objects
+    // window.bunny is kept for Bunny-spec plugins; window.retribution is the unified API
     window.bunny = lib;
 
     // Start debugger
     initDebugger();
 
-    // Once done, load Vendetta plugins
+    // Once done, load Retribution plugins (polymanifest format)
     try {
         lib.unload.push(await VdPluginManager.initPlugins());
         await handlePendingDeepLink();
     } catch (e) {
-        logger.error("Failed to initialize Vendetta plugins or handle deep link", e);
+        logger.error("Failed to initialize plugins or handle deep link", e);
     }
 
-    // And then, load Bunny plugins
+    // And then, load Bunny-spec plugins
     initPlugins();
 
     // Update the fonts

@@ -1,5 +1,5 @@
 import { formatString, Strings } from "@core/i18n";
-import { createProxy, useProxy } from "@core/vendetta/storage";
+import { createProxy, useProxy } from "@core/vd-compat/storage";
 import { FontDefinition, fonts, removeFont, saveFont, updateFont, validateFont } from "@lib/addons/fonts";
 import { getCurrentTheme } from "@lib/addons/themes";
 import { findAssetId } from "@lib/api/assets";

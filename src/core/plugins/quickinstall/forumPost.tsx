@@ -1,6 +1,6 @@
 import { Strings } from "@core/i18n";
-import { VdPluginManager } from "@core/vendetta/plugins";
-import { useProxy } from "@core/vendetta/storage";
+import { VdPluginManager } from "@core/vd-compat/plugins";
+import { useProxy } from "@core/vd-compat/storage";
 import { installTheme, removeTheme, themes } from "@lib/addons/themes";
 import { findAssetId } from "@lib/api/assets";
 import { isThemeSupported } from "@lib/api/native/loader";

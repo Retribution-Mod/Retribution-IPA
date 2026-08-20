@@ -11,6 +11,7 @@ declare global {
 
     interface Window {
         [key: string]: any;
+        retribution: any;
         vendetta: any;
         bunny: typeof import("@lib");
     }

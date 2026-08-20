@@ -1,4 +1,4 @@
-import { createFileBackend, createMMKVBackend, createStorage, wrapSync } from "@core/vendetta/storage";
+import { createFileBackend, createMMKVBackend, createStorage, wrapSync } from "@core/vd-compat/storage";
 import { getLoaderConfigPath } from "@lib/api/native/loader";
 
 export interface Settings {

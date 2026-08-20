@@ -1,4 +1,4 @@
-import { awaitStorage, createFileBackend, createMMKVBackend, createStorage, wrapSync } from "@core/vendetta/storage";
+import { awaitStorage, createFileBackend, createMMKVBackend, createStorage, wrapSync } from "@core/vd-compat/storage";
 import { writeFile } from "@lib/api/native/fs";
 import { getStoredTheme, getThemeFilePath, isPyonLoader, isThemeSupported } from "@lib/api/native/loader";
 import { awaitStorage as newAwaitStorage } from "@lib/api/storage";

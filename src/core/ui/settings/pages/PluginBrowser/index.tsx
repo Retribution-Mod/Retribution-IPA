@@ -1,5 +1,5 @@
-import { VdPluginManager } from "@core/vendetta/plugins";
-import { useProxy } from "@core/vendetta/storage";
+import { VdPluginManager } from "@core/vd-compat/plugins";
+import { useProxy } from "@core/vd-compat/storage";
 import { createStorage, useObservable } from "@lib/api/storage";
 import { findAssetId } from "@lib/api/assets";
 import { dismissAlert, openAlert } from "@lib/ui/alerts";
