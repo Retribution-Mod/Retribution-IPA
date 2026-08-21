@@ -15,7 +15,7 @@ interface PluginDataItem {
     hidden?: boolean;
 }
 
-const PUBLIC_PLUGINS_URL = "https://retribution-mod.github.io/retribution-website/data/plugins-data.json";
+const PUBLIC_PLUGINS_URL = "https://retribution.is-your.app/data/plugins-data.json";
 
 export default function PluginDataBrowser() {
     const [items, setItems] = useState<PluginDataItem[]>(pluginsData as unknown as PluginDataItem[]);
