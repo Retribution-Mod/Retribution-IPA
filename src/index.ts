@@ -14,6 +14,8 @@ import { fileExists, readFile, removeFile } from "@lib/api/native/fs";
 import { patchJsx } from "@lib/api/react/jsx";
 import { logger } from "@lib/utils/logger";
 import { patchSettings } from "@ui/settings";
+import { showToast } from "@lib/ui/toasts";
+import { findAssetId } from "@lib/api/assets";
 
 import * as lib from "./lib";
 
@@ -33,12 +35,15 @@ async function handlePendingDeepLink() {
     switch (payload.type) {
         case "plugin":
             await VdPluginManager.installPlugin(payload.url);
+            showToast(`Installed plugin from ${payload.url}`, findAssetId("CheckmarkSmallIcon")!);
             break;
         case "theme":
             await fetchTheme(payload.url, true);
+            showToast("Theme applied", findAssetId("CheckmarkSmallIcon")!);
             break;
         case "font":
             await installFont(payload.url, true);
+            showToast("Font applied", findAssetId("CheckmarkSmallIcon")!);
             break;
         default:
             throw new Error("Invalid deep link type");
@@ -76,7 +81,9 @@ export default async () => {
         lib.unload.push(await VdPluginManager.initPlugins());
         await handlePendingDeepLink();
     } catch (e) {
+        const message = e instanceof Error ? e.message : String(e);
         logger.error("Failed to initialize plugins or handle deep link", e);
+        showToast(`Deep link failed: ${message}`, findAssetId("XSmallIcon")!);
     }
 
     // And then, load Bunny-spec plugins
