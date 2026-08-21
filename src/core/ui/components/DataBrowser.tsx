@@ -42,7 +42,7 @@ export default function DataBrowser<T extends DataItem>({
                 actions={[
                     {
                         icon: "DownloadIcon",
-                        disabled: item.status === "broken",
+                        disabled: item.status === "broken" || item.status === "incompatible",
                         onPress: async () => {
                             try {
                                 await onInstall(item);
