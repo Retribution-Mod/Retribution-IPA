@@ -148,6 +148,7 @@ export default function AddonPage<T extends object>({ CardComponent, ...props }:
     }, []);
 
     if (results.length === 0 && !search) {
+        const Footer = props.ListFooterComponent;
         return <View style={{ gap: 32, flexGrow: 1, justifyContent: "center", alignItems: "center" }}>
             <View style={{ gap: 8, alignItems: "center" }}>
                 <Image source={findAssetId("empty_quick_switcher")!} />
@@ -161,6 +162,7 @@ export default function AddonPage<T extends object>({ CardComponent, ...props }:
                 text={props.installAction?.label ?? "Install"}
                 onPress={onInstallPress}
             />
+            {Footer && <Footer />}
         </View>;
     }
 
