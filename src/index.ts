@@ -5,7 +5,7 @@ import initSettings from "@core/ui/settings";
 import { initRetributionObject } from "@core/vd-compat/api";
 import { VdPluginManager } from "@core/vd-compat/plugins";
 import { installFont, updateFonts } from "@lib/addons/fonts";
-import { initPlugins, updatePlugins } from "@lib/addons/plugins";
+import { initPlugins, updateAllRepository, updatePlugins } from "@lib/addons/plugins";
 import { fetchTheme, initThemes } from "@lib/addons/themes";
 import { patchCommands } from "@lib/api/commands";
 import { initDebugger } from "@lib/api/debug";
@@ -79,6 +79,7 @@ export default async () => {
     // Once done, load Retribution plugins (polymanifest format)
     try {
         lib.unload.push(await VdPluginManager.initPlugins());
+        lib.unload.push(VdPluginManager.schedulePluginUpdateChecks());
         await handlePendingDeepLink();
     } catch (e) {
         const message = e instanceof Error ? e.message : String(e);
@@ -86,8 +87,13 @@ export default async () => {
         showToast(`Deep link failed: ${message}`, findAssetId("XSmallIcon")!);
     }
 
-    // And then, load Bunny-spec plugins
-    initPlugins();
+    // And then, load Bunny-spec plugins after repository data is refreshed in the background
+    updateAllRepository()
+        .then(() => initPlugins())
+        .catch(e => {
+            logger.error("Failed to refresh plugin repositories", e);
+            initPlugins();
+        });
 
     // Update the fonts
     updateFonts();

@@ -1,9 +1,13 @@
 import { awaitStorage, createMMKVBackend, createStorage, purgeStorage, wrapSync } from "@core/vd-compat/storage";
 import { Author } from "@lib/addons/types";
+import { BundleUpdaterManager } from "@lib/api/native/modules";
 import { settings } from "@lib/api/settings";
+import { openAlert } from "@lib/ui/alerts";
 import { safeFetch } from "@lib/utils";
 import { BUNNY_PROXY_PREFIX, VD_PROXY_PREFIX } from "@lib/utils/constants";
 import { logger,LoggerClass } from "@lib/utils/logger";
+import { AlertActionButton, AlertActions, AlertModal } from "@metro/common/components";
+import { createElement as h } from "react";
 
 type EvaledPlugin = {
     onLoad?(): void;
@@ -185,6 +189,45 @@ export const VdPluginManager = {
 
     stopAllPlugins() {
         return Object.keys(pluginInstance).forEach(p => this.stopPlugin(p, false));
+    },
+
+    schedulePluginUpdateChecks(intervalMs = 15 * 60 * 1000) {
+        const checkForUpdates = async () => {
+            const ids = Object.keys(plugins).filter(id => plugins[id].update);
+            if (ids.length === 0) return;
+
+            const before = new Map<string, string>();
+            for (const id of ids) before.set(id, plugins[id].manifest.hash);
+
+            await Promise.allSettled(ids.map(id => this.fetchPlugin(id).catch((e: Error) => logger.error(`[PluginUpdateChecker] ${id}: ${e.message}`))));
+
+            const updatedIds = ids.filter(id => plugins[id].manifest.hash !== before.get(id));
+            if (updatedIds.length === 0) return;
+
+            const names = updatedIds.map(id => plugins[id].manifest.name).filter(Boolean).join(", ");
+            openAlert(
+                "retribution-plugin-updates",
+                h(AlertModal, {
+                    title: "Plugin Updates Available",
+                    content: `Plugin updates are available for: ${names}. Would you like to reload now to apply them?`,
+                    actions: h(AlertActions, null,
+                        h(AlertActionButton, {
+                            text: "Reload Now",
+                            variant: "primary",
+                            onPress: () => BundleUpdaterManager.reload()
+                        }),
+                        h(AlertActionButton, {
+                            text: "Reload Later",
+                            variant: "secondary"
+                        })
+                    )
+                })
+            );
+        };
+
+        const id = setInterval(checkForUpdates, intervalMs);
+        checkForUpdates();
+        return () => clearInterval(id);
     },
 
     getSettings: (id: string) => pluginInstance[id]?.settings

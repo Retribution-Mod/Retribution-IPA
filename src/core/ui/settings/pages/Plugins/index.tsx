@@ -1,6 +1,5 @@
 import { Strings } from "@core/i18n";
 import AddonPage from "@core/ui/components/AddonPage";
-import PluginBrowser from "@core/ui/settings/pages/PluginBrowser";
 import PluginDataBrowser from "@core/ui/settings/pages/PluginDataBrowser";
 import PluginCard from "@core/ui/settings/pages/Plugins/components/PluginCard";
 import { VdPluginManager } from "@core/vd-compat/plugins";
@@ -120,17 +119,6 @@ export default function Plugins() {
                         navigation.push("BUNNY_CUSTOM_PAGE", {
                             title: "Public Plugin Browser",
                             render: PluginDataBrowser,
-                        });
-                    }}
-                />
-                <Button
-                    size="lg"
-                    text="Browse Plugin Repos"
-                    icon={findAssetId("CompassIcon")}
-                    onPress={() => {
-                        navigation.push("BUNNY_CUSTOM_PAGE", {
-                            title: "Plugin Repos",
-                            render: PluginBrowser,
                         });
                     }}
                 />

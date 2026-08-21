@@ -380,7 +380,8 @@ export async function updatePlugins() {
         corePluginInstances.set(id, instance);
     }
 
-    await updateAllRepository();
+    // Repository updates are deferred off the critical startup path.
+    // index.ts will call updateAllRepository() in the background after core load.
 }
 
 /**
