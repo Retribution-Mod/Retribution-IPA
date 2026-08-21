@@ -1,5 +1,6 @@
 import { Strings } from "@core/i18n";
 import AddonPage from "@core/ui/components/AddonPage";
+import PluginBrowser from "@core/ui/settings/pages/PluginBrowser";
 import PluginDataBrowser from "@core/ui/settings/pages/PluginDataBrowser";
 import PluginCard from "@core/ui/settings/pages/Plugins/components/PluginCard";
 import { VdPluginManager } from "@core/vd-compat/plugins";
@@ -9,7 +10,10 @@ import { Author } from "@lib/addons/types";
 import { findAssetId } from "@lib/api/assets";
 import { settings } from "@lib/api/settings";
 import { useObservable } from "@lib/api/storage";
+import { showToast } from "@lib/ui/toasts";
 import { BUNNY_PROXY_PREFIX, VD_PROXY_PREFIX } from "@lib/utils/constants";
+import { lazyDestructure } from "@lib/utils/lazy";
+import { findByProps } from "@metro";
 import { NavigationNative } from "@metro/common";
 import { Button, Card, FlashList, IconButton, Text } from "@metro/common/components";
 import { ComponentProps } from "react";
@@ -19,6 +23,8 @@ import { UnifiedPluginModel } from "./models";
 import unifyBunnyPlugin from "./models/bunny";
 import unifyVdPlugin from "./models/vendetta";
 
+const { openAlert } = lazyDestructure(() => findByProps("openAlert", "dismissAlert"));
+const { AlertModal, AlertActions, AlertActionButton } = lazyDestructure(() => findByProps("AlertModal", "AlertActions"));
 
 interface PluginPageProps extends Partial<ComponentProps<typeof AddonPage<UnifiedPluginModel>>> {
     useItems: () => unknown[];
@@ -117,7 +123,45 @@ export default function Plugins() {
                         });
                     }}
                 />
+                <Button
+                    size="lg"
+                    text="Browse Plugin Repos"
+                    icon={findAssetId("CompassIcon")}
+                    onPress={() => {
+                        navigation.push("BUNNY_CUSTOM_PAGE", {
+                            title: "Plugin Repos",
+                            render: PluginBrowser,
+                        });
+                    }}
+                />
             </View>
         )}
+        installAction={{
+            label: "Install a plugin",
+            fetchFn: async (url: string) => {
+                if (!url.startsWith(VD_PROXY_PREFIX) && !url.startsWith(BUNNY_PROXY_PREFIX) && !settings.developerSettings) {
+                    openAlert("bunny-plugin-unproxied-confirmation", <AlertModal
+                        title="Hold On!"
+                        content="You're trying to install a plugin from an unproxied external source. This means you're trusting the creator to run their code in this app without your knowledge. Are you sure you want to continue?"
+                        extraContent={<Card><Text variant="text-md/bold">{url}</Text></Card>}
+                        actions={<AlertActions>
+                            <AlertActionButton text="Continue" variant="primary" onPress={() => {
+                                VdPluginManager.installPlugin(url)
+                                    .then(() => showToast(Strings.TOASTS_INSTALLED_PLUGIN, findAssetId("DownloadIcon")))
+                                    .catch(e => openAlert("bunny-plugin-install-failed", <AlertModal
+                                        title="Install Failed"
+                                        content={`Unable to install plugin from '${url}':`}
+                                        extraContent={<Card><Text variant="text-md/normal">{e instanceof Error ? e.message : String(e)}</Text></Card>}
+                                        actions={<AlertActionButton text="Okay" variant="primary" />}
+                                    />));
+                            }} />
+                            <AlertActionButton text="Cancel" variant="secondary" />
+                        </AlertActions>}
+                    />);
+                } else {
+                    return await VdPluginManager.installPlugin(url);
+                }
+            }
+        }}
     />;
 }
