@@ -1,3 +1,5 @@
+import { awaitStorage } from "@core/vd-compat/storage";
+import { settings } from "@lib/api/settings";
 import patchErrorBoundary from "@core/debug/patches/patchErrorBoundary";
 import initFixes from "@core/fixes";
 import { initFetchI18nStrings } from "@core/i18n";
@@ -18,6 +20,7 @@ import { openAlert } from "@lib/ui/alerts";
 import { showToast } from "@lib/ui/toasts";
 import { findAssetId } from "@lib/api/assets";
 import { patchSettings } from "@ui/settings";
+import initQuote from "@core/message/quote";
 import { semver } from "@metro/common";
 import { AlertActionButton, AlertActions, AlertModal } from "@metro/common/components";
 import { createElement as h } from "react";
@@ -82,32 +85,46 @@ export default async () => {
         return;
     }
 
-    // Load everything in parallel
+    await awaitStorage(settings);
+
+    if (settings.safeMode?.enabled) {
+        logger.warn("Safe mode is enabled; skipping plugins, themes, fonts, and heavy patches.");
+
+        await Promise.all([
+            initRetributionObject(),
+            initFetchI18nStrings(),
+            patchSettings(),
+            patchJsx(),
+            initSettings(),
+            initFixes(),
+            patchErrorBoundary()
+        ]).then(u => u.forEach(f => f && lib.unload.push(f)));
+
+        window.bunny = lib;
+        initDebugger();
+
+        showToast("Safe mode is enabled. Plugins, themes, and fonts are disabled.", findAssetId("XSmallIcon")!);
+        logger.log("Retribution is ready in safe mode!");
+        return;
+    }
     await Promise.all([
         initThemes(),
-        injectFluxInterceptor(),
         patchSettings(),
-        patchCommands(),
         patchJsx(),
         initRetributionObject(),
         initFetchI18nStrings(),
         initSettings(),
         initFixes(),
         patchErrorBoundary(),
-        updatePlugins()
+        updatePlugins(),
+        initQuote()
     ]).then(
-        // Push them all to unloader
         u => u.forEach(f => f && lib.unload.push(f))
     );
-
-    // Assign window objects
-    // window.bunny is kept for Bunny-spec plugins; window.retribution is the unified API
+    lib.unload.push(patchCommands());
+    lib.unload.push(injectFluxInterceptor());
     window.bunny = lib;
-
-    // Start debugger
     initDebugger();
-
-    // Once done, load Retribution plugins (polymanifest format)
     try {
         lib.unload.push(await VdPluginManager.initPlugins());
         lib.unload.push(VdPluginManager.schedulePluginUpdateChecks());
@@ -117,18 +134,12 @@ export default async () => {
         logger.error("Failed to initialize plugins or handle deep link", e);
         showToast(`Deep link failed: ${message}`, findAssetId("XSmallIcon")!);
     }
-
-    // And then, load Bunny-spec plugins after repository data is refreshed in the background
     updateAllRepository()
         .then(() => initPlugins())
         .catch(e => {
             logger.error("Failed to refresh plugin repositories", e);
             initPlugins();
         });
-
-    // Update the fonts
     updateFonts();
-
-    // We good :)
     logger.log("Retribution is ready!");
 };

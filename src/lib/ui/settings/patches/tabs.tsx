@@ -1,20 +1,14 @@
 import { after } from "@lib/api/patcher";
 import { TableRow } from "@metro/common/components";
-import { findByNameLazy, findByPropsLazy } from "@metro/wrappers";
+import { findByPropsLazy } from "@metro/wrappers";
 import { registeredSections } from "@ui/settings";
 import { Strings } from "@core/i18n";
 import { CustomPageRenderer, wrapOnPress } from "./shared";
-import { findInReactTree } from "@lib/utils";
 
 const settingConstants = findByPropsLazy("SETTING_RENDERER_CONFIG");
 const createListModule = findByPropsLazy("createList");
-const SettingsOverviewScreen = findByNameLazy("SettingsOverviewScreen", false);
 
-function useIsFirstRender() {
-    let firstRender = false;
-    React.useEffect(() => void (firstRender = true), []);
-    return firstRender;
-}
+
 
 export function patchTabsUI(unpatches: (() => void | boolean)[]) {
     const getRows = () => Object.values(registeredSections)
@@ -75,51 +69,37 @@ export function patchTabsUI(unpatches: (() => void | boolean)[]) {
         });
     });
 
-    try{
+    if (createListModule) {
         unpatches.push(after("createList", createListModule, function(args, ret) {
             const [config] = args;
-        
-            if (config?.sections && Array.isArray(config.sections)) {
-                const sections = config.sections;
-            
-                // Insert Retribution at the very top of the settings list
-                let index = 0;
+            if (!config?.sections || !Array.isArray(config.sections)) return ret;
 
-                Object.keys(registeredSections).forEach(sect => {
-                    const rows = registeredSections[sect];
-                    if (!rows?.length) return;
+            // createList is shared across every settings sub-page, not just the
+            // top-level overview. SettingsOverviewScreen's default export can't be
+            // patched directly (Discord captures a direct reference internally
+            // before our patch runs), so scope by call stack instead — verified
+            // live that only the top-level screen's call chain includes a
+            // SettingsOverviewScreen frame.
+            const stack = new Error().stack ?? "";
+            if (!stack.includes("SettingsOverviewScreen")) return ret;
 
-                    const alreadyExists = sections.some((s: any) => s.label === sect);
-                    if (!alreadyExists) {
-                        sections.splice(index++, 0, {
-                            label: sect,
-                            title: sect,
-                            settings: rows.map(a => a.key)
-                        });
-                    }
-                });
-            }
-            return ret;
-        },));
+            const sections = config.sections;
+            let index = 0;
 
-    }catch{
-    unpatches.push(after("default", SettingsOverviewScreen, (_, ret) => {
-        if (useIsFirstRender()) return; // :shrug:
+            Object.keys(registeredSections).forEach(sect => {
+                const rows = registeredSections[sect];
+                if (!rows?.length) return;
 
-        const { sections } = findInReactTree(ret, i => i.props?.sections).props;
-        // Insert Retribution at the very top of the settings list
-        let index = 0;
-
-        Object.keys(registeredSections).forEach(sect => {
-            const rows = registeredSections[sect];
-            if (!rows?.length) return;
-
-            sections.splice(index++, 0, {
-                label: sect,
-                title: sect,
-                settings: rows.map(a => a.key)
+                const alreadyExists = sections.some((s: any) => s.label === sect);
+                if (!alreadyExists) {
+                    sections.splice(index++, 0, {
+                        label: sect,
+                        title: sect,
+                        settings: rows.map(a => a.key)
+                    });
+                }
             });
-        });
-    }));
+            return ret;
+        }));
     }
 };

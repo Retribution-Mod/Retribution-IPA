@@ -1,5 +1,6 @@
 import DataBrowser from "@core/ui/components/DataBrowser";
-import { installTheme } from "@lib/addons/themes";
+import { useProxy } from "@core/vd-compat/storage";
+import { fetchTheme, themes } from "@lib/addons/themes";
 import themesData from "@assets/data/themes-data.json";
 
 interface ThemeDataItem {
@@ -9,15 +10,18 @@ interface ThemeDataItem {
     status?: string;
     installUrl: string;
     tags?: string[];
+    images?: string[];
 }
 
 export default function ThemeBrowser() {
+    useProxy(themes);
+
     return (
         <DataBrowser<ThemeDataItem>
             title="Theme Browser"
             items={themesData as ThemeDataItem[]}
             onInstall={async (item) => {
-                await installTheme(item.installUrl);
+                await fetchTheme(item.installUrl, true);
             }}
             searchKeys={[
                 "name",
@@ -33,6 +37,7 @@ export default function ThemeBrowser() {
                 label: "Install a theme",
                 fetchFn: (url) => installTheme(url),
             }}
+            isInstalled={(item) => item.installUrl in themes}
         />
     );
 }

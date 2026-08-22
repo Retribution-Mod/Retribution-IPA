@@ -90,9 +90,7 @@ export const VdPluginManager = {
         if (enabled) await this.startPlugin(id);
     },
 
-    /**
-     * @internal
-     */
+    /** @internal */
     async evalPlugin(plugin: VendettaPlugin) {
         const api = {
             ...window.retribution,
@@ -170,9 +168,7 @@ export const VdPluginManager = {
         await purgeStorage(id);
     },
 
-    /**
-     * @internal
-     */
+    /** @internal */
     async initPlugins() {
         await awaitStorage(settings, plugins);
         const allIds = Object.keys(plugins);

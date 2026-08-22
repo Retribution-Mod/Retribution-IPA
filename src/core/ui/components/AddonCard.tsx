@@ -4,7 +4,8 @@ import { Card, FormRadio, FormSwitch, IconButton, LegacyFormRow, Stack, Text } f
 import { findByProps } from "@metro/wrappers";
 import { semanticColors } from "@ui/color";
 import { createStyles, TextStyleSheet } from "@ui/styles";
-import { TouchableOpacity, View } from "react-native";
+import type { ReactNode } from "react";
+import { ScrollView, TouchableOpacity, View } from "react-native";
 
 const { hideActionSheet } = lazyDestructure(() => findByProps("openLazy", "hideActionSheet"));
 const { showSimpleActionSheet } = lazyDestructure(() => findByProps("showSimpleActionSheet"));
@@ -59,7 +60,7 @@ const useStyles = createStyles({
 });
 
 interface Action {
-    icon: string;
+    icon: string | ReactNode;
     disabled?: boolean;
     onPress: () => void;
 }
@@ -74,18 +75,20 @@ export interface CardWrapper<T> {
     result: Fuzzysort.KeysResult<T>;
 }
 
-interface CardProps {
+export interface CardProps {
     index?: number;
     headerLabel: string;
     headerSublabel?: string;
     headerIcon?: string;
     toggleType?: "switch" | "radio";
-    toggleValue: () => boolean;
+    toggleValue?: () => boolean;
     onToggleChange?: (v: boolean) => void;
     descriptionLabel?: string;
+    images?: string[];
     actions?: Action[];
     overflowTitle?: string;
     overflowActions?: OverflowAction[];
+    children?: ReactNode;
 }
 
 export default function AddonCard(props: CardProps) {
@@ -114,7 +117,7 @@ export default function AddonCard(props: CardProps) {
                                         },
                                         options: props.overflowActions?.map(i => ({
                                             ...i,
-                                            icon: findAssetId(i.icon)
+                                            icon: typeof i.icon === "string" ? findAssetId(i.icon) : i.icon
                                         })),
                                     })}
                                     size="sm"
@@ -127,20 +130,20 @@ export default function AddonCard(props: CardProps) {
                                     disabled={disabled}
                                     size="sm"
                                     variant="secondary"
-                                    icon={findAssetId(icon)}
+                                    icon={typeof icon === "string" ? findAssetId(icon) : icon}
                                 />
                             ))}
                         </View>
                         {props.toggleType && (props.toggleType === "switch" ?
                             <FormSwitch
-                                value={props.toggleValue()}
+                                value={props.toggleValue?.() ?? false}
                                 onValueChange={props.onToggleChange}
                             />
                             :
                             <TouchableOpacity onPress={() => {
-                                props.onToggleChange?.(!props.toggleValue());
+                                props.onToggleChange?.(!props.toggleValue?.());
                             }}>
-                                <FormRadio selected={props.toggleValue()} />
+                                <FormRadio selected={props.toggleValue?.() ?? false} />
                             </TouchableOpacity>
                         )}
                     </View>
@@ -148,6 +151,19 @@ export default function AddonCard(props: CardProps) {
                 {props.descriptionLabel && <Text variant="text-md/medium">
                     {props.descriptionLabel}
                 </Text>}
+                {props.images && props.images.length > 0 && (
+                    <ScrollView horizontal showsHorizontalScrollIndicator={false}>
+                        {props.images.map((uri, i) => (
+                            <Image
+                                key={`${uri}-${i}`}
+                                source={{ uri }}
+                                style={{ width: 200, height: 120, borderRadius: 8, marginRight: 8 }}
+                                resizeMode="cover"
+                            />
+                        ))}
+                    </ScrollView>
+                )}
+                {props.children}
             </Stack>
         </Card >
     );

@@ -1,5 +1,6 @@
 import DataBrowser from "@core/ui/components/DataBrowser";
 import { VdPluginManager } from "@core/vd-compat/plugins";
+import { useProxy } from "@core/vd-compat/storage";
 import pluginsData from "@assets/data/plugins-data.json";
 import safeFetch from "@lib/utils/safeFetch";
 import { useEffect, useState } from "react";
@@ -18,6 +19,7 @@ interface PluginDataItem {
 const PUBLIC_PLUGINS_URL = "https://retribution.is-your.app/data/plugins-data.json";
 
 export default function PluginDataBrowser() {
+    useProxy(VdPluginManager.plugins);
     const [items, setItems] = useState<PluginDataItem[]>(pluginsData as unknown as PluginDataItem[]);
 
     useEffect(() => {
@@ -54,6 +56,10 @@ export default function PluginDataBrowser() {
             installAction={{
                 label: "Install a plugin",
                 fetchFn: (url) => VdPluginManager.installPlugin(url, true),
+            }}
+            isInstalled={(item) => {
+                const url = item.installUrl.endsWith("/") ? item.installUrl : item.installUrl + "/";
+                return url in VdPluginManager.plugins;
             }}
         />
     );
