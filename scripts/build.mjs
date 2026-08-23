@@ -125,7 +125,7 @@ const config = {
     ]
 };
 
-export async function buildBundle(overrideConfig = {}, skipHermes) {
+export async function buildBundle(overrideConfig = {}, compileHermes) {
     context = {
         hash: releaseBranch ? execSync("git rev-parse --short HEAD").toString().trim() : crypto.randomBytes(8).toString("hex").slice(0, 7)
     };
@@ -133,7 +133,7 @@ export async function buildBundle(overrideConfig = {}, skipHermes) {
     const initialStartTime = performance.now();
     await build({ ...config, ...overrideConfig });
 
-    if (!skipHermes) {
+    if (compileHermes) {
         const paths = {
             win32: "win64-bin/hermesc.exe",
             darwin: "osx-bin/hermesc",
