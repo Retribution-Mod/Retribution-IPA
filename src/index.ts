@@ -1,3 +1,4 @@
+import { captureException } from "@lib/sentry";
 import { awaitStorage } from "@core/vd-compat/storage";
 import { settings } from "@lib/api/settings";
 import patchErrorBoundary from "@core/debug/patches/patchErrorBoundary";
@@ -60,6 +61,7 @@ async function handlePendingDeepLink() {
 }
 
 export default async () => {
+    try {
     const loaderVersion = getLoaderVersion();
     if (loaderVersion && semver.lt(loaderVersion, "1.6.3")) {
         openAlert(
@@ -142,4 +144,8 @@ export default async () => {
         });
     updateFonts();
     logger.log("Retribution is ready!");
+    } catch (e) {
+        captureException(e);
+        throw e;
+    }
 };
